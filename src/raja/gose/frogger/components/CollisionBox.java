@@ -1,14 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package raja.gose.frogger.components;
 
 /**
  *
- * @author Administrator
+ * CollisionBox stores any moving objects position which is based on a
+ * rectangle. Only one corner is needed as well as the width and height of the
+ * object. Two CollisionBoxes can be compared with each other to calculate
+ * whether or not the two intersect, therefore a collision has occured.
+ *
+ * Copyright (c) 2016
+ *
+ * @author Adrian Gose & Saad Raja
+ *
  */
+
 public class CollisionBox {
 
     private int x1;
@@ -16,34 +20,75 @@ public class CollisionBox {
     private int width;
     private int height;
 
+    /**
+     * Create a new collision box for a image/drawing/object.
+     *
+     * @param x1 Top left corner X value
+     * @param y1 Top left corner Y value
+     * @param width Width of the entire object
+     * @param height Height of the entire object
+     */
     public CollisionBox(int x1, int y1, int width, int height) {
         this.setCorner(x1, y1);
         this.width = width;
         this.height = height;
     }
 
+    /**
+     * Sets the new/current corner of the object, based on the top leftmost
+     * point.
+     *
+     * @param x1 Top left corner X value
+     * @param y1 Top left corner Y value
+     */
     public void setCorner(int x1, int y1) {
         this.x1 = x1;
         this.y1 = y1;
     }
 
+    /**
+     * Returns integer of the top left X value.
+     *
+     * @return
+     */
     public int getTopLeftX() {
         return x1;
     }
 
+    /**
+     * Returns integer of the bottom right X value.
+     *
+     * @return
+     */
     public int getBottomRightX() {
         return x1 + width;
     }
 
+    /**
+     * Returns integer of the top left Y value.
+     *
+     * @return
+     */
     public int getTopLeftY() {
         return y1;
     }
 
+    /**
+     * Returns integer of the bottom right Y value.
+     *
+     * @return
+     */
     public int getBottomRightY() {
         return y1 + height;
     }
 
-    public Boolean isColliding(CollisionBox other) {
+    /**
+     * Checks if two CollisionBoxes have collided/intersected.
+     * 
+     * @param other Another CollisionBox object
+     * @return Boolean of whether the two objects have collided or not.
+     */
+    public Boolean checkCollision(CollisionBox other) {
 
         //               x1r2, y1r2
         // x1, y1  A------D--A----------D

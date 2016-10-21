@@ -1,26 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package raja.gose.frogger.components;
+
+/**
+ *
+ * Handles score tracking and showing strings on the JFrame
+ *
+ * Copyright (c) 2016
+ *
+ * @author Adrian Gose & Saad Raja
+ *
+ */
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import javax.swing.JComponent;
 
-/**
- *
- * @author Administrator
- */
-public class ScoreLabel extends JComponent {
+
+public class Score extends JComponent {
 
     private final String title = "Current Score: ";
     int score = 0;
-
     boolean loss = false;
 
+    /**
+     * Draws the score title and or game over sign
+     * @param gfx 
+     */
     public void draw(Graphics2D gfx) {
 
         String display = title + score;
@@ -39,14 +44,23 @@ public class ScoreLabel extends JComponent {
 
     }
 
+    /**
+     * Sets the text to show game over
+     */
     public void loss() {
         this.loss = true;
     }
 
+    /**
+     * Add to the score
+     */
     public void addWin() {
-
         score++;
-
+    }
+    
+    @Override
+    public String toString(){
+        return this.getClass().getName()+"[text="+this.title+ "score= "+this.score+"]";
     }
 
 }

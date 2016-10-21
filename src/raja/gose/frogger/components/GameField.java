@@ -1,9 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package raja.gose.frogger.components;
+
+/**
+ *
+ * Houses all components to the game
+ *
+ * Copyright (c) 2016
+ *
+ * @author Adrian Gose & Saad Raja
+ *
+ */
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -11,106 +16,158 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import javax.swing.JComponent;
 
-/**
- *
- * @author Administrator
- */
 public class GameField extends JComponent {
-    
+
     private ArrayList<Car> cars = new ArrayList<>();
     private Frog frog;
-    private ScoreLabel score;
-    
+    private Score score;
     private Dimension fieldDimension;
-    private Difficulty diff;
-    
+    private DIFFICULTY diff;
     private int numCars = 0;
-    
-    public enum Difficulty {
-        
-        EASY, MEDIUM, HARD
+
+    /**
+     * Enumeration values of DIFFICULTY (Number of lanes) of the game
+     * Easy to add or remove difficulty levels as options
+     * are dynamically generated using this enumeration.
+     */
+    public enum DIFFICULTY {
+
+        ONE(1), TWO(2), THREE(3), FIVE(5), EIGHT(8);
+
+        private int numCars;
+
+        DIFFICULTY(int numCars) {
+            this.numCars = numCars;
+        }
+
+        public int numCars() {
+            return this.numCars;
+        }
+
+        /**
+         * Returns a string array of
+         * current values of the enum 
+         * @return 
+         */
+        public static String[] valuesAsString() {
+            DIFFICULTY[] diff = values();
+            
+            String[] names = new String[diff.length];
+
+            for (int i = 0; i < diff.length; i++) {
+                names[i] = diff[i].name();
+            }
+
+            return names;
+        }
+
     }
     
-    public GameField(Difficulty diff) {    
+    /**
+     * Creates a new GameField with a specified Difficulty
+     * 
+     * Calculates heights, lanes, and positions based on the difficulty(Number of cars) 
+     * 
+     * (Theoretically, as many cars can be implemented but dynamic sizes of the cars have not been implemented yet.
+     * 
+     * @param diff 
+     */
+    public GameField(DIFFICULTY diff) {
+
         frog = new Frog();
-        score = new ScoreLabel();
-        
-        if (diff.equals(Difficulty.EASY)) {
-            
-            fieldDimension = new Dimension(1000, frog.getHeight() * 3);
-            numCars = 1;
-            
-        } else if (diff.equals(Difficulty.MEDIUM)) {
-            
-            fieldDimension = new Dimension(1000, frog.getHeight() * 4);
-            numCars = 2;
-        } else if (diff.equals(Difficulty.HARD)) {
-            
-            fieldDimension = new Dimension(1000, frog.getHeight() * 5);
-            numCars = 3;
-        }
-        
+        score = new Score();
+
+        /** **/
+        numCars = diff.numCars();
+        fieldDimension = new Dimension(1000, frog.getHeight() * (numCars + 2));
+
         for (int i = 0; i < numCars; i++) {
-            
+
             int relativeHeight = frog.getHeight() * (i + 1);
             Car car = new Car(relativeHeight);
-            
-            System.out.println("Makeing new car" + i + "HITE " + relativeHeight);
-            
             cars.add(car);
+
         }
-        
-        frog.setY(frog.getHeight()*(numCars+1));
-        
-        
+
+        frog.setY(frog.getHeight() * (numCars + 1));
+
     }
-    
+
+    /**
+     * Paints components of each object.
+     * This will call the draw() method of each game object to draw
+     * image to the JFrame
+     * @param g 
+     */
     @Override
     public void paintComponent(Graphics g) {
-        
+
         Graphics2D gfx = (Graphics2D) g;
-        
+
+        /* Draws a nice border around the games field */
         gfx.drawRect(0, 0, fieldDimension.width, fieldDimension.height);
-        
+
         for (Car car : cars) {
             car.draw(gfx);
         }
-        
+
         frog.draw(gfx);
         score.draw(gfx);
-        
+
     }
-    
-    public void winEvent(){
-        
+
+    /**
+     * If the frog reaches the other side, call this.
+     */
+    public void winEvent() {
+
         incrementSpeed();
-        
+
         score.addWin();
-        
-        frog.setY(frog.getHeight()*(numCars+1));
-        
+
+        frog.setY(frog.getHeight() * (numCars + 1));
+
     }
-  
+
+    /**
+     * Returns all the cars in the game
+     * @return 
+     */
     public ArrayList<Car> getCars() {
         return cars;
     }
-    
-    public ScoreLabel getScore(){
+
+    /**
+     * Returns the Score object
+     * @return 
+     */
+    public Score getScore() {
         return this.score;
     }
-    
+
+    /**
+     * Returns a frog object
+     * @return 
+     */
+    public Frog getFrog() {
+        return frog;
+    }
+
+    /**
+     * Increments the speed of all the cars.
+     */
     public void incrementSpeed() {
         for (Car c : getCars()) {
             c.increaseSpeed();
         }
     }
-    
-    public Frog getFrog() {
-        return frog;
-    }
-    
-    public Dimension getFieldDimension(){
+
+    /**
+     * Get the dimensions of the playing field.
+     * @return 
+     */
+    public Dimension getFieldDimension() {
         return this.fieldDimension;
     }
-    
+
 }
